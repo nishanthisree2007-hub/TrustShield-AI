@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  trustshield-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trustshield_ai_platform
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - SECRET_KEY=trustshield-production-secret-key-2026
+      - DATABASE_URL=sqlite:///./trustshield.db
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - trustshield_vault:/app/backend/vault_evidence
+      - trustshield_data:/app/backend
+    restart: unless-stopped
+
+volumes:
+  trustshield_vault:
+  trustshield_data:
